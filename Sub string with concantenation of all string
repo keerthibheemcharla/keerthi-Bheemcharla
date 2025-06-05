@@ -1,0 +1,61 @@
+#include <vector>
+#include <string>
+#include <unordered_map>
+using namespace std;
+
+class Solution {
+public:
+    vector<int> findSubstring(string s, vector<string>& words) {
+        vector<int> result;
+        if (words.empty() || s.empty()) return result;
+
+        int wordLen = words[0].size();
+        int wordCount = words.size();
+        int totalLen = wordLen * wordCount;
+        if (s.size() < totalLen) return result;
+
+        unordered_map<string, int> wordFreq;
+        for (const string& word : words) {
+            wordFreq[word]++;
+        }
+
+        // We check for every possible offset in [0, wordLen)
+        for (int i = 0; i < wordLen; ++i) {
+            int left = i, count = 0;
+            unordered_map<string, int> windowFreq;
+
+            for (int j = i; j <= (int)s.size() - wordLen; j += wordLen) {
+                string sub = s.substr(j, wordLen);
+                if (wordFreq.count(sub)) {
+                    windowFreq[sub]++;
+                    count++;
+
+                    // If frequency exceeds, move left pointer to reduce count
+                    while (windowFreq[sub] > wordFreq[sub]) {
+                        string leftWord = s.substr(left, wordLen);
+                        windowFreq[leftWord]--;
+                        count--;
+                        left += wordLen;
+                    }
+
+                    // If window matches all words
+                    if (count == wordCount) {
+                        result.push_back(left);
+                        // Move left to try next window
+                        string leftWord = s.substr(left, wordLen);
+                        windowFreq[leftWord]--;
+                        count--;
+                        left += wordLen;
+                    }
+                } else {
+                    // Reset window if word not found
+                    windowFreq.clear();
+                    count = 0;
+                    left = j + wordLen;
+                }
+            }
+        }
+
+        return result;
+    }
+};
