@@ -1,0 +1,98 @@
+import java.util.*;
+
+// Definition for singly-linked list.
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int val) {
+        this.val = val;
+        this.next = null;
+    }
+}
+
+// Definition for a binary tree node.
+class TreeNode {
+    int val;
+    TreeNode left, right;
+    TreeNode(int val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+
+class Solution {
+    public TreeNode sortedListToBST(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        return constructBST(head, null);
+    }
+
+    private TreeNode constructBST(ListNode start, ListNode end) {
+        if (start == end) {
+            return null;
+        }
+
+        ListNode mid = findMiddle(start, end);
+        TreeNode root = new TreeNode(mid.val);
+
+        root.left = constructBST(start, mid);
+        root.right = constructBST(mid.next, end);
+
+        return root;
+    }
+
+    private ListNode findMiddle(ListNode start, ListNode end) {
+        ListNode slow = start, fast = start;
+        while (fast != end && fast.next != end) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+
+    
+    public List<Integer> levelOrder(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        if (root == null) return result;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            TreeNode current = queue.poll();
+            if (current != null) {
+                result.add(current.val);
+                queue.add(current.left);
+                queue.add(current.right);
+            } else {
+                result.add(null);
+            }
+        }
+     
+        while (!result.isEmpty() && result.get(result.size() - 1) == null) {
+            result.remove(result.size() - 1);
+        }
+        return result;
+    }
+}
+
+
+public class Main {
+    public static void main(String[] args) {
+        
+        ListNode head = new ListNode(-10);
+        head.next = new ListNode(-3);
+        head.next.next = new ListNode(0);
+        head.next.next.next = new ListNode(5);
+        head.next.next.next.next = new ListNode(9);
+
+        Solution solution = new Solution();
+        TreeNode root = solution.sortedListToBST(head);
+
+        
+        List<Integer> result = solution.levelOrder(root);
+        System.out.println(result);
+    }
+}
+
