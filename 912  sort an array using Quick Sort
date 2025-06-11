@@ -1,0 +1,48 @@
+public class Solution {
+    // Partition function to place pivot at correct position
+    private int partition(int[] nums, int low, int high) {
+        int pivot = nums[high]; // Choosing the last element as pivot
+        int i = low - 1; // Index of smaller element
+
+        for (int j = low; j <= high - 1; j++) {
+            if (nums[j] <= pivot) {
+                i++;
+                // Swap nums[i] and nums[j]
+                int temp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = temp;
+            }
+        }
+        // Swap nums[i + 1] and nums[high]
+        int temp = nums[i + 1];
+        nums[i + 1] = nums[high];
+        nums[high] = temp;
+        return i + 1;
+    }
+
+    // QuickSort function
+    private void quickSort(int[] nums, int low, int high) {
+        if (low < high) {
+            int pi = partition(nums, low, high);
+            quickSort(nums, low, pi - 1); // Before partition
+            quickSort(nums, pi + 1, high); // After partition
+        }
+    }
+
+    // Public method to sort the array
+    public int[] sortArray(int[] nums) {
+        quickSort(nums, 0, nums.length - 1);
+        return nums;
+    }
+
+    // Main method to test the sorting
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        int[] nums = {5, 2, 3, 1};
+        int[] sortedNums = solution.sortArray(nums);
+
+        for (int num : sortedNums) {
+            System.out.print(num + " ");
+        }
+    }
+}
