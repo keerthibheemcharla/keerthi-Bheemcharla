@@ -1,0 +1,32 @@
+import java.util.HashMap;
+import java.util.Map;
+
+public class LCS {
+
+    private static Map<String, Integer> memo = new HashMap<>();
+    public static int lcs(String s1, String s2, int m, int n) {
+        if (m == 0 || n == 0) {
+            return 0;
+        }
+        String key = m + "," + n;
+        if (memo.containsKey(key)) {
+            return memo.get(key);
+        }
+
+        if (s1.charAt(m - 1) == s2.charAt(n - 1)) {
+            int result = 1 + lcs(s1, s2, m - 1, n - 1);
+            memo.put(key, result);
+            return result;
+        } else {
+            int result = Math.max(lcs(s1, s2, m, n - 1), lcs(s1, s2, m - 1, n));
+            memo.put(key, result);
+            return result;
+        }
+    }
+
+    public static void main(String[] args) {
+        String s1 = "ABCDXYZ";
+        String s2 = "XYZABCD";
+        System.out.println("Length of LCS: " + lcs(s1, s2, s1.length(), s2.length()));
+    }
+}
