@@ -1,0 +1,32 @@
+class Employee {
+    String Name;
+    int Id;
+    float Salary;
+    String company;
+
+    // Constructor to initialize employee details
+    Employee(String Name, int Id, float Salary, String company) {
+        this.Name = Name;
+        this.Id = Id;
+        this.Salary = Salary;
+        this.company = company;
+    }
+
+    // Method to display employee details
+    void details() {
+        System.out.println("Name: " + this.Name);
+        System.out.println("Id: " + this.Id);
+        System.out.println("Salary: " + this.Salary);
+        System.out.println("Company: " + this.company);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Creating an Employee object using the constructor
+        Employee e1 = new Employee("Keerthi", 245, 100000000f, "TATA CONSULTANCY SERVICES");
+
+        // Displaying the details of the employee
+        e1.details();
+    }
+}
